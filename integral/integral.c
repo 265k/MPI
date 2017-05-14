@@ -24,8 +24,11 @@ rect (double (*f) (double), double ll, double ul, int n, int size, int rank)
   double s = 0, R, dx;
   int i;
 
-  ul = ((rank + 1) * 1.0 / size) * ul;
-  ll = ((rank + 1) * 1.0 / size) * ll;
+  R = ul - ll;
+  ll = ul - R * ((rank + 1) / size);
+  ul = ul - R * (rank / size);
+
+  //evaluating range for the process
   R = ul - ll;
   dx = R / n;
 
@@ -41,8 +44,11 @@ trapez (double (*f) (double), double ll, double ul, int n, int size, int rank)
   double s = 0, R, dx;
   int i;
 
-  ul = ((rank + 1) * 1.0 / size) * ul;
-  ll = ((rank + 1) * 1.0 / size) * ll;
+  R = ul - ll;
+  ll = ul - R * ((rank + 1) / size);
+  ul = ul - R * (rank / size);
+
+  //evaluating range for the process
   R = ul - ll;
   dx = R / n;
 
