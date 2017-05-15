@@ -76,7 +76,7 @@ main (int argc, char **argv)
 
   rp = rect (f, ll, ul, n);
   tp = trapez (f, ll, ul, n);
-
+  
   //0 represents the master process
   MPI_Reduce (&rp, &rt, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
   MPI_Reduce (&tp, &tt, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
