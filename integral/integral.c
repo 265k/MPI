@@ -9,8 +9,7 @@
    n - number of steps
    R - integration range
    f - target f
-   ps - partial sum
-   ts - total sum*/
+   s - sum */
 
 double
 function (double x)
@@ -19,16 +18,11 @@ function (double x)
 }
 
 double
-rect (double (*f) (double), double ll, double ul, int n, int size, int rank)
+rect (double (*f) (double), double ll, double ul, int n)
 {
   double s = 0, R, dx;
   int i;
 
-  R = ul - ll;
-  ll = ul - R * ((rank + 1) / size);
-  ul = ul - R * (rank / size);
-
-  //evaluating range for the process
   R = ul - ll;
   dx = R / n;
 
@@ -39,16 +33,11 @@ rect (double (*f) (double), double ll, double ul, int n, int size, int rank)
 }
 
 double
-trapez (double (*f) (double), double ll, double ul, int n, int size, int rank)
+trapez (double (*f) (double), double ll, double ul, int n)
 {
   double s = 0, R, dx;
   int i;
 
-  R = ul - ll;
-  ll = ul - R * ((rank + 1) / size);
-  ul = ul - R * (rank / size);
-
-  //evaluating range for the process
   R = ul - ll;
   dx = R / n;
 
@@ -69,7 +58,7 @@ main (int argc, char **argv)
       return 1;
     }
   int size, rank;
-  double rp, tp, rt, tt;
+  double rp, tp, rt, tt, R;
   double (*f) (double);
   double ll = atof (argv[1]), ul = atof (argv[2]);
   int n = atoi (argv[3]);
@@ -80,9 +69,14 @@ main (int argc, char **argv)
   MPI_Comm_size (MPI_COMM_WORLD, &size);
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);
 
-  rp = rect (f, ll, ul, n, size, rank);
-  tp = trapez (f, ll, ul, n, size, rank);
+  //computing limits for each process
+  R = ul - ll;
+  ll = ul - R * ((rank + 1) / size);
+  ul = ul - R * (rank / size);
 
+  rp = rect (f, ll, ul, n);
+  tp = trapez (f, ll, ul, n);
+  
   //0 represents the master process
   MPI_Reduce (&rp, &rt, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
   MPI_Reduce (&tp, &tt, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
