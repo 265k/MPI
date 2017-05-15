@@ -29,10 +29,11 @@ main (int argc, char **argv)
       x = (2.0 * rand () / RAND_MAX) - 1;
       y = (2.0 * rand () / RAND_MAX) - 1;
       if (x * x + y * y <= 1.0)
-	{
-	  M++;
-	}
+    	 {
+	       M++;
+       }
     }
+
   MPI_Reduce (&M, &MT, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
   if (rank == 0)
     {
