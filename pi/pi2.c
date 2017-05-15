@@ -9,7 +9,7 @@ main (int argc, char **argv)
 {
   int M = 0;
   int N = 9999999;
-  long double x, y;
+  double x, y;
   double pi;
   time_t t;
   int size, rank;
@@ -23,15 +23,15 @@ main (int argc, char **argv)
   MPI_Comm_size (MPI_COMM_WORLD, &size);
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);
 
-  n = N/size;
+  n = N / size;
   for (int i = 0; i < n; i++)
     {
-      x = (2.0 / size * rand () / RAND_MAX) - 1.0 * (rank+1) / size;
+      x = ((2.0 * rand () / RAND_MAX) / size) - 1 + 2.0 * rank / size;
       y = (2.0 * rand () / RAND_MAX) - 1;
       if (x * x + y * y <= 1.0)
-    	 {
-	       M++;
-       }
+	{
+	  M++;
+	}
     }
 
   MPI_Reduce (&M, &MT, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
