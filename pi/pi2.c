@@ -40,6 +40,7 @@ main (int argc, char **argv)
       pi = 4.0 * MT / N;
       printf ("pi = %f\n", pi);
     }
+    
   MPI_Finalize ();
   return 0;
 }
